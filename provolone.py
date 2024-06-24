@@ -4,13 +4,12 @@ import ply.yacc as yacc
 # Lexer tokens
 tokens = (
     'INICIO', 'MONITOR', 'EXECUTE', 'TERMINO', 
-    'ENQUANTO', 'FACA', 'FIM', 
-    'OUT', 'ID', 'NUMERO',
+    'ENQUANTO', 'FACA', 'FIM', 'ID', 'NUMERO',
     'PLUS', 'EQUAL', 'MULT', 
     'IF', 'THEN', 'ELSE', 
     'ZERO', 'EVAL', 'VEZES', 
     'COMPARE', 'GREATER', 'LESSER',
-    'END_IF'
+    'END_IF', 'OPEN_PAREN', 'CLOSE_PAREN',
 )
 
 # Token definitions (regexs)
@@ -21,7 +20,6 @@ t_TERMINO = r'TERMINO'
 t_ENQUANTO = r'ENQUANTO'
 t_FACA = r'FACA'
 t_FIM = r'FIM'
-t_OUT = r'OUT'
 t_IF = r'IF'
 t_END_IF = r'END_IF'
 t_THEN = r'THEN'
@@ -36,6 +34,10 @@ t_PLUS = r'\+'
 t_EQUAL = r'='
 t_MULT = r'\*'
 t_NUMERO = r'\d+'
+t_OPEN_PAREN = r'\('
+t_CLOSE_PAREN = r'\)'
+
+monitored_vars = dict()
 
 # Identifier (ID) token definition
 def t_ID(t):
@@ -55,7 +57,6 @@ reserved = {
     'ENQUANTO': 'ENQUANTO',
     'FACA': 'FACA',
     'FIM': 'FIM',
-    'OUT': 'OUT',
     'IF': 'IF',
     'THEN': 'THEN',
     'ELSE': 'ELSE',
@@ -65,7 +66,9 @@ reserved = {
     'COMPARE': 'COMPARE',
     'GREATER': 'GREATER',
     'LESSER': 'LESSER',
-    'END_IF': 'END_IF'
+    'END_IF': 'END_IF',
+    'OPEN_PAREN': 'OPEN_PAREN',
+    'CLose_PAREN': 'CLOSE_PAREN',
 }
 
 # Error handling for unknown characters
@@ -81,13 +84,13 @@ precedence = (
 
 # Grammar rules
 def p_programa(p):
-    '''programa : INICIO varlist MONITOR varlist EXECUTE cmds TERMINO '''
+    '''programa : INICIO varlist MONITOR idlist EXECUTE cmds TERMINO '''
     p[0] = f"#include <stdio.h>\nint main() {{\n{p[2]}\n{p[4]}\n{p[6]}\nreturn 0;\n}}"
     print(f"Programa reconhecido: {p[0:]}")
 
 def p_cmds(p):
     '''cmds : cmd cmds
-            | empty'''
+            | cmd'''
     for cmd in p[1:]:
         if cmd is not None and p[0] is None:
             p[0] = cmd
@@ -96,15 +99,18 @@ def p_cmds(p):
     print(f"Cmds reconhecido {p[0:]}")
 
 def p_cmd(p):
-    ''' cmd : ENQUANTO ID FACA cmds FIM
+    ''' cmd : while_statement
             | assignment
             | arithmetic_expr
             | conditional
             | zero_statement
             | eval_statement
-            | out_statement
     '''
     p[0] = f"{p[1]};"
+    for var in monitored_vars:
+        if monitored_vars[var] == 1:
+            p[0] += f"\nprintf(\"{var} = %d\\n\", {var});\n"
+            monitored_vars[var] = 0
     print(f"Cmd reconhecido {p[0:]}")
 
 def p_assignment(p):
@@ -117,13 +123,25 @@ def p_assignment(p):
     print(f"Assignment reconhecido {p[0:]}")
 
 def p_arithmetic_expr(p):
-    ''' arithmetic_expr : ID PLUS ID 
-                        | ID PLUS NUMERO 
-                        | NUMERO PLUS ID
-                        | ID MULT ID 
-                        | ID MULT NUMERO 
-                        | NUMERO MULT ID '''
-    p[0] = f"{p[1]} {p[2]} {p[3]}"
+    ''' arithmetic_expr : arithmetic_expr PLUS arithmetic_expr
+                        | arithmetic_expr MULT arithmetic_expr
+                        | OPEN_PAREN arithmetic_expr CLOSE_PAREN
+                        | ID
+                        | NUMERO
+    '''
+    print(f"Antes Expressão aritmética reconhecida {p[0:]}")
+    if len(p) == 4 and p[1] == '(' and p[3] == ')':
+        p[0] = f"({p[2]})"
+        if p[2] in monitored_vars:
+            monitored_vars[p[2]] = 1
+    elif len(p) == 4:
+        p[0] = f"{p[1]} {p[2]} {p[3]}"
+        if p[1] in monitored_vars:
+            monitored_vars[p[1]] = 1
+    else:
+        p[0] = p[1]
+        if p[1] in monitored_vars:
+            monitored_vars[p[1]] = 1
     print(f"Expressão aritmética reconhecida {p[0:]}")
 
 def p_conditional(p):
@@ -135,19 +153,23 @@ def p_conditional(p):
         p[0] = f"\nif ({p[2]}) {{\n{p[4]}\n}} else {{\n{p[6]}\n}}" 
     print(f"Condicional reconhecido {p[0:]}")
 
+def p_while_statement(p):
+    ''' while_statement : ENQUANTO condicao FACA cmds FIM '''
+    p[0] = f"while ({p[2]}) {{\n{p[4]}\n}}"
+    print(f"While statement reconhecido {p[0:]}")
+
 def p_zero_statement(p):
     ''' zero_statement : ZERO ID '''
-    p[0] = f"{p[2]} = 0;"
+    p[0] = f"{p[2]} = 0"
     print(f"Zero statement reconhecido {p[0:]}")
 
 def p_eval_statement(p):
     ''' eval_statement : EVAL cmds VEZES arithmetic_expr FIM 
-                       | EVAL cmds VEZES ID FIM '''
+                       | EVAL cmds VEZES ID FIM 
+                       | EVAL cmds VEZES NUMERO FIM
+    '''
+    p[0] = f"for (int i = 0; i < {p[4]}; i++) {{\n{p[2]}\n}}"
     print(f"Eval statement reconhecido {p[0:]}")
-
-def p_out_statement(p):
-    ''' out_statement : OUT ID '''
-    print(f"Out statement reconhecido {p[0:]}")
 
 def p_varlist(p):
     '''varlist : ID varlist
@@ -157,6 +179,7 @@ def p_varlist(p):
             p[0] = f"int {var} = 0;\n"
         elif var is not None:
             p[0] += f"{var}"
+
     print(f"Varlist reconhecida {p[0:]}")
 
 def p_condicao(p):
@@ -169,9 +192,18 @@ def p_condicao(p):
     p[0] = f"{p[1]} {p[2]} {p[3]}"
     print(f"Condição reconhecida {p[0:]}")
 
-def p_empty(p):
-    'empty :'
-    pass
+def p_idlist(p):
+    '''idlist : ID idlist
+              | ID'''
+    for var in p[1:]:
+        if var is not None and len(monitored_vars) == 0 and p[0] is None:
+            monitored_vars[var] = 0
+            p[0] = f"// Monitored vars: {var} "
+        elif var is not None:
+            monitored_vars[var] = 0
+            p[0] += f"{var} "
+    
+    print(f"Idlist reconhecida {p[0:]}")
 
 def p_error(p):
     print(f"Syntax error at '{p.value}'")
@@ -185,10 +217,9 @@ out_file = open("results/teste0.c", "w")
 
 # Parse input program
 lexer.input(in_file)
-# for token in lexer:
-    # print(token)
 
 out_text = parser.parse(in_file)
 out_file.write(out_text)
 
 out_file.close()
+print(monitored_vars)
