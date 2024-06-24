@@ -1,0 +1,1164 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> INICIO varlist MONITOR varlist EXECUTE cmds TERMINO
+Rule 2     cmds -> cmd cmds
+Rule 3     cmds -> empty
+Rule 4     cmd -> ENQUANTO ID FACA cmds FIM
+Rule 5     cmd -> assignment
+Rule 6     cmd -> arithmetic_expr
+Rule 7     cmd -> conditional
+Rule 8     cmd -> zero_statement
+Rule 9     cmd -> eval_statement
+Rule 10    cmd -> out_statement
+Rule 11    assignment -> ID EQUAL ID
+Rule 12    assignment -> ID EQUAL NUMERO
+Rule 13    assignment -> ID EQUAL arithmetic_expr
+Rule 14    arithmetic_expr -> ID PLUS ID
+Rule 15    arithmetic_expr -> ID PLUS NUMERO
+Rule 16    arithmetic_expr -> NUMERO PLUS ID
+Rule 17    arithmetic_expr -> ID MULT ID
+Rule 18    arithmetic_expr -> ID MULT NUMERO
+Rule 19    arithmetic_expr -> NUMERO MULT ID
+Rule 20    conditional -> IF condicao THEN cmds END_IF
+Rule 21    conditional -> IF condicao THEN cmds ELSE cmds END_IF
+Rule 22    zero_statement -> ZERO ID
+Rule 23    eval_statement -> EVAL cmds VEZES arithmetic_expr FIM
+Rule 24    eval_statement -> EVAL cmds VEZES ID FIM
+Rule 25    out_statement -> OUT ID
+Rule 26    varlist -> ID varlist
+Rule 27    varlist -> ID
+Rule 28    condicao -> ID COMPARE ID
+Rule 29    condicao -> ID GREATER ID
+Rule 30    condicao -> ID LESSER ID
+Rule 31    condicao -> ID COMPARE NUMERO
+Rule 32    condicao -> ID GREATER NUMERO
+Rule 33    condicao -> ID LESSER NUMERO
+Rule 34    empty -> <empty>
+
+Terminals, with rules where they appear
+
+COMPARE              : 28 31
+ELSE                 : 21
+END_IF               : 20 21
+ENQUANTO             : 4
+EQUAL                : 11 12 13
+EVAL                 : 23 24
+EXECUTE              : 1
+FACA                 : 4
+FIM                  : 4 23 24
+GREATER              : 29 32
+ID                   : 4 11 11 12 13 14 14 15 16 17 17 18 19 22 24 25 26 27 28 28 29 29 30 30 31 32 33
+IF                   : 20 21
+INICIO               : 1
+LESSER               : 30 33
+MONITOR              : 1
+MULT                 : 17 18 19
+NUMERO               : 12 15 16 18 19 31 32 33
+OUT                  : 25
+PLUS                 : 14 15 16
+TERMINO              : 1
+THEN                 : 20 21
+VEZES                : 23 24
+ZERO                 : 22
+error                : 
+
+Nonterminals, with rules where they appear
+
+arithmetic_expr      : 6 13 23
+assignment           : 5
+cmd                  : 2
+cmds                 : 1 2 4 20 21 21 23 24
+condicao             : 20 21
+conditional          : 7
+empty                : 3
+eval_statement       : 9
+out_statement        : 10
+programa             : 0
+varlist              : 1 1 26
+zero_statement       : 8
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . INICIO varlist MONITOR varlist EXECUTE cmds TERMINO
+
+    INICIO          shift and go to state 2
+
+    programa                       shift and go to state 1
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> INICIO . varlist MONITOR varlist EXECUTE cmds TERMINO
+    (26) varlist -> . ID varlist
+    (27) varlist -> . ID
+
+    ID              shift and go to state 4
+
+    varlist                        shift and go to state 3
+
+state 3
+
+    (1) programa -> INICIO varlist . MONITOR varlist EXECUTE cmds TERMINO
+
+    MONITOR         shift and go to state 5
+
+
+state 4
+
+    (26) varlist -> ID . varlist
+    (27) varlist -> ID .
+    (26) varlist -> . ID varlist
+    (27) varlist -> . ID
+
+    MONITOR         reduce using rule 27 (varlist -> ID .)
+    EXECUTE         reduce using rule 27 (varlist -> ID .)
+    ID              shift and go to state 4
+
+    varlist                        shift and go to state 6
+
+state 5
+
+    (1) programa -> INICIO varlist MONITOR . varlist EXECUTE cmds TERMINO
+    (26) varlist -> . ID varlist
+    (27) varlist -> . ID
+
+    ID              shift and go to state 4
+
+    varlist                        shift and go to state 7
+
+state 6
+
+    (26) varlist -> ID varlist .
+
+    MONITOR         reduce using rule 26 (varlist -> ID varlist .)
+    EXECUTE         reduce using rule 26 (varlist -> ID varlist .)
+
+
+state 7
+
+    (1) programa -> INICIO varlist MONITOR varlist . EXECUTE cmds TERMINO
+
+    EXECUTE         shift and go to state 8
+
+
+state 8
+
+    (1) programa -> INICIO varlist MONITOR varlist EXECUTE . cmds TERMINO
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    TERMINO         reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmds                           shift and go to state 9
+    cmd                            shift and go to state 10
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    arithmetic_expr                shift and go to state 15
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 9
+
+    (1) programa -> INICIO varlist MONITOR varlist EXECUTE cmds . TERMINO
+
+    TERMINO         shift and go to state 25
+
+
+state 10
+
+    (2) cmds -> cmd . cmds
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    TERMINO         reduce using rule 34 (empty -> .)
+    VEZES           reduce using rule 34 (empty -> .)
+    FIM             reduce using rule 34 (empty -> .)
+    END_IF          reduce using rule 34 (empty -> .)
+    ELSE            reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmd                            shift and go to state 10
+    cmds                           shift and go to state 26
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    arithmetic_expr                shift and go to state 15
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 11
+
+    (3) cmds -> empty .
+
+    TERMINO         reduce using rule 3 (cmds -> empty .)
+    VEZES           reduce using rule 3 (cmds -> empty .)
+    FIM             reduce using rule 3 (cmds -> empty .)
+    END_IF          reduce using rule 3 (cmds -> empty .)
+    ELSE            reduce using rule 3 (cmds -> empty .)
+
+
+state 12
+
+    (4) cmd -> ENQUANTO . ID FACA cmds FIM
+
+    ID              shift and go to state 27
+
+
+state 13
+
+    (11) assignment -> ID . EQUAL ID
+    (12) assignment -> ID . EQUAL NUMERO
+    (13) assignment -> ID . EQUAL arithmetic_expr
+    (14) arithmetic_expr -> ID . PLUS ID
+    (15) arithmetic_expr -> ID . PLUS NUMERO
+    (17) arithmetic_expr -> ID . MULT ID
+    (18) arithmetic_expr -> ID . MULT NUMERO
+
+    EQUAL           shift and go to state 28
+    PLUS            shift and go to state 29
+    MULT            shift and go to state 30
+
+
+state 14
+
+    (5) cmd -> assignment .
+
+    ENQUANTO        reduce using rule 5 (cmd -> assignment .)
+    ID              reduce using rule 5 (cmd -> assignment .)
+    NUMERO          reduce using rule 5 (cmd -> assignment .)
+    IF              reduce using rule 5 (cmd -> assignment .)
+    ZERO            reduce using rule 5 (cmd -> assignment .)
+    EVAL            reduce using rule 5 (cmd -> assignment .)
+    OUT             reduce using rule 5 (cmd -> assignment .)
+    TERMINO         reduce using rule 5 (cmd -> assignment .)
+    VEZES           reduce using rule 5 (cmd -> assignment .)
+    FIM             reduce using rule 5 (cmd -> assignment .)
+    END_IF          reduce using rule 5 (cmd -> assignment .)
+    ELSE            reduce using rule 5 (cmd -> assignment .)
+
+
+state 15
+
+    (6) cmd -> arithmetic_expr .
+
+    ENQUANTO        reduce using rule 6 (cmd -> arithmetic_expr .)
+    ID              reduce using rule 6 (cmd -> arithmetic_expr .)
+    NUMERO          reduce using rule 6 (cmd -> arithmetic_expr .)
+    IF              reduce using rule 6 (cmd -> arithmetic_expr .)
+    ZERO            reduce using rule 6 (cmd -> arithmetic_expr .)
+    EVAL            reduce using rule 6 (cmd -> arithmetic_expr .)
+    OUT             reduce using rule 6 (cmd -> arithmetic_expr .)
+    TERMINO         reduce using rule 6 (cmd -> arithmetic_expr .)
+    VEZES           reduce using rule 6 (cmd -> arithmetic_expr .)
+    FIM             reduce using rule 6 (cmd -> arithmetic_expr .)
+    END_IF          reduce using rule 6 (cmd -> arithmetic_expr .)
+    ELSE            reduce using rule 6 (cmd -> arithmetic_expr .)
+
+
+state 16
+
+    (7) cmd -> conditional .
+
+    ENQUANTO        reduce using rule 7 (cmd -> conditional .)
+    ID              reduce using rule 7 (cmd -> conditional .)
+    NUMERO          reduce using rule 7 (cmd -> conditional .)
+    IF              reduce using rule 7 (cmd -> conditional .)
+    ZERO            reduce using rule 7 (cmd -> conditional .)
+    EVAL            reduce using rule 7 (cmd -> conditional .)
+    OUT             reduce using rule 7 (cmd -> conditional .)
+    TERMINO         reduce using rule 7 (cmd -> conditional .)
+    VEZES           reduce using rule 7 (cmd -> conditional .)
+    FIM             reduce using rule 7 (cmd -> conditional .)
+    END_IF          reduce using rule 7 (cmd -> conditional .)
+    ELSE            reduce using rule 7 (cmd -> conditional .)
+
+
+state 17
+
+    (8) cmd -> zero_statement .
+
+    ENQUANTO        reduce using rule 8 (cmd -> zero_statement .)
+    ID              reduce using rule 8 (cmd -> zero_statement .)
+    NUMERO          reduce using rule 8 (cmd -> zero_statement .)
+    IF              reduce using rule 8 (cmd -> zero_statement .)
+    ZERO            reduce using rule 8 (cmd -> zero_statement .)
+    EVAL            reduce using rule 8 (cmd -> zero_statement .)
+    OUT             reduce using rule 8 (cmd -> zero_statement .)
+    TERMINO         reduce using rule 8 (cmd -> zero_statement .)
+    VEZES           reduce using rule 8 (cmd -> zero_statement .)
+    FIM             reduce using rule 8 (cmd -> zero_statement .)
+    END_IF          reduce using rule 8 (cmd -> zero_statement .)
+    ELSE            reduce using rule 8 (cmd -> zero_statement .)
+
+
+state 18
+
+    (9) cmd -> eval_statement .
+
+    ENQUANTO        reduce using rule 9 (cmd -> eval_statement .)
+    ID              reduce using rule 9 (cmd -> eval_statement .)
+    NUMERO          reduce using rule 9 (cmd -> eval_statement .)
+    IF              reduce using rule 9 (cmd -> eval_statement .)
+    ZERO            reduce using rule 9 (cmd -> eval_statement .)
+    EVAL            reduce using rule 9 (cmd -> eval_statement .)
+    OUT             reduce using rule 9 (cmd -> eval_statement .)
+    TERMINO         reduce using rule 9 (cmd -> eval_statement .)
+    VEZES           reduce using rule 9 (cmd -> eval_statement .)
+    FIM             reduce using rule 9 (cmd -> eval_statement .)
+    END_IF          reduce using rule 9 (cmd -> eval_statement .)
+    ELSE            reduce using rule 9 (cmd -> eval_statement .)
+
+
+state 19
+
+    (10) cmd -> out_statement .
+
+    ENQUANTO        reduce using rule 10 (cmd -> out_statement .)
+    ID              reduce using rule 10 (cmd -> out_statement .)
+    NUMERO          reduce using rule 10 (cmd -> out_statement .)
+    IF              reduce using rule 10 (cmd -> out_statement .)
+    ZERO            reduce using rule 10 (cmd -> out_statement .)
+    EVAL            reduce using rule 10 (cmd -> out_statement .)
+    OUT             reduce using rule 10 (cmd -> out_statement .)
+    TERMINO         reduce using rule 10 (cmd -> out_statement .)
+    VEZES           reduce using rule 10 (cmd -> out_statement .)
+    FIM             reduce using rule 10 (cmd -> out_statement .)
+    END_IF          reduce using rule 10 (cmd -> out_statement .)
+    ELSE            reduce using rule 10 (cmd -> out_statement .)
+
+
+state 20
+
+    (16) arithmetic_expr -> NUMERO . PLUS ID
+    (19) arithmetic_expr -> NUMERO . MULT ID
+
+    PLUS            shift and go to state 31
+    MULT            shift and go to state 32
+
+
+state 21
+
+    (20) conditional -> IF . condicao THEN cmds END_IF
+    (21) conditional -> IF . condicao THEN cmds ELSE cmds END_IF
+    (28) condicao -> . ID COMPARE ID
+    (29) condicao -> . ID GREATER ID
+    (30) condicao -> . ID LESSER ID
+    (31) condicao -> . ID COMPARE NUMERO
+    (32) condicao -> . ID GREATER NUMERO
+    (33) condicao -> . ID LESSER NUMERO
+
+    ID              shift and go to state 34
+
+    condicao                       shift and go to state 33
+
+state 22
+
+    (22) zero_statement -> ZERO . ID
+
+    ID              shift and go to state 35
+
+
+state 23
+
+    (23) eval_statement -> EVAL . cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> EVAL . cmds VEZES ID FIM
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    VEZES           reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmds                           shift and go to state 36
+    arithmetic_expr                shift and go to state 15
+    cmd                            shift and go to state 10
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 24
+
+    (25) out_statement -> OUT . ID
+
+    ID              shift and go to state 37
+
+
+state 25
+
+    (1) programa -> INICIO varlist MONITOR varlist EXECUTE cmds TERMINO .
+
+    $end            reduce using rule 1 (programa -> INICIO varlist MONITOR varlist EXECUTE cmds TERMINO .)
+
+
+state 26
+
+    (2) cmds -> cmd cmds .
+
+    TERMINO         reduce using rule 2 (cmds -> cmd cmds .)
+    VEZES           reduce using rule 2 (cmds -> cmd cmds .)
+    FIM             reduce using rule 2 (cmds -> cmd cmds .)
+    END_IF          reduce using rule 2 (cmds -> cmd cmds .)
+    ELSE            reduce using rule 2 (cmds -> cmd cmds .)
+
+
+state 27
+
+    (4) cmd -> ENQUANTO ID . FACA cmds FIM
+
+    FACA            shift and go to state 38
+
+
+state 28
+
+    (11) assignment -> ID EQUAL . ID
+    (12) assignment -> ID EQUAL . NUMERO
+    (13) assignment -> ID EQUAL . arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+
+    ID              shift and go to state 39
+    NUMERO          shift and go to state 40
+
+    arithmetic_expr                shift and go to state 41
+
+state 29
+
+    (14) arithmetic_expr -> ID PLUS . ID
+    (15) arithmetic_expr -> ID PLUS . NUMERO
+
+    ID              shift and go to state 42
+    NUMERO          shift and go to state 43
+
+
+state 30
+
+    (17) arithmetic_expr -> ID MULT . ID
+    (18) arithmetic_expr -> ID MULT . NUMERO
+
+    ID              shift and go to state 44
+    NUMERO          shift and go to state 45
+
+
+state 31
+
+    (16) arithmetic_expr -> NUMERO PLUS . ID
+
+    ID              shift and go to state 46
+
+
+state 32
+
+    (19) arithmetic_expr -> NUMERO MULT . ID
+
+    ID              shift and go to state 47
+
+
+state 33
+
+    (20) conditional -> IF condicao . THEN cmds END_IF
+    (21) conditional -> IF condicao . THEN cmds ELSE cmds END_IF
+
+    THEN            shift and go to state 48
+
+
+state 34
+
+    (28) condicao -> ID . COMPARE ID
+    (29) condicao -> ID . GREATER ID
+    (30) condicao -> ID . LESSER ID
+    (31) condicao -> ID . COMPARE NUMERO
+    (32) condicao -> ID . GREATER NUMERO
+    (33) condicao -> ID . LESSER NUMERO
+
+    COMPARE         shift and go to state 49
+    GREATER         shift and go to state 50
+    LESSER          shift and go to state 51
+
+
+state 35
+
+    (22) zero_statement -> ZERO ID .
+
+    ENQUANTO        reduce using rule 22 (zero_statement -> ZERO ID .)
+    ID              reduce using rule 22 (zero_statement -> ZERO ID .)
+    NUMERO          reduce using rule 22 (zero_statement -> ZERO ID .)
+    IF              reduce using rule 22 (zero_statement -> ZERO ID .)
+    ZERO            reduce using rule 22 (zero_statement -> ZERO ID .)
+    EVAL            reduce using rule 22 (zero_statement -> ZERO ID .)
+    OUT             reduce using rule 22 (zero_statement -> ZERO ID .)
+    TERMINO         reduce using rule 22 (zero_statement -> ZERO ID .)
+    VEZES           reduce using rule 22 (zero_statement -> ZERO ID .)
+    FIM             reduce using rule 22 (zero_statement -> ZERO ID .)
+    END_IF          reduce using rule 22 (zero_statement -> ZERO ID .)
+    ELSE            reduce using rule 22 (zero_statement -> ZERO ID .)
+
+
+state 36
+
+    (23) eval_statement -> EVAL cmds . VEZES arithmetic_expr FIM
+    (24) eval_statement -> EVAL cmds . VEZES ID FIM
+
+    VEZES           shift and go to state 52
+
+
+state 37
+
+    (25) out_statement -> OUT ID .
+
+    ENQUANTO        reduce using rule 25 (out_statement -> OUT ID .)
+    ID              reduce using rule 25 (out_statement -> OUT ID .)
+    NUMERO          reduce using rule 25 (out_statement -> OUT ID .)
+    IF              reduce using rule 25 (out_statement -> OUT ID .)
+    ZERO            reduce using rule 25 (out_statement -> OUT ID .)
+    EVAL            reduce using rule 25 (out_statement -> OUT ID .)
+    OUT             reduce using rule 25 (out_statement -> OUT ID .)
+    TERMINO         reduce using rule 25 (out_statement -> OUT ID .)
+    VEZES           reduce using rule 25 (out_statement -> OUT ID .)
+    FIM             reduce using rule 25 (out_statement -> OUT ID .)
+    END_IF          reduce using rule 25 (out_statement -> OUT ID .)
+    ELSE            reduce using rule 25 (out_statement -> OUT ID .)
+
+
+state 38
+
+    (4) cmd -> ENQUANTO ID FACA . cmds FIM
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    FIM             reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmds                           shift and go to state 53
+    cmd                            shift and go to state 10
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    arithmetic_expr                shift and go to state 15
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 39
+
+    (11) assignment -> ID EQUAL ID .
+    (14) arithmetic_expr -> ID . PLUS ID
+    (15) arithmetic_expr -> ID . PLUS NUMERO
+    (17) arithmetic_expr -> ID . MULT ID
+    (18) arithmetic_expr -> ID . MULT NUMERO
+
+    ENQUANTO        reduce using rule 11 (assignment -> ID EQUAL ID .)
+    ID              reduce using rule 11 (assignment -> ID EQUAL ID .)
+    NUMERO          reduce using rule 11 (assignment -> ID EQUAL ID .)
+    IF              reduce using rule 11 (assignment -> ID EQUAL ID .)
+    ZERO            reduce using rule 11 (assignment -> ID EQUAL ID .)
+    EVAL            reduce using rule 11 (assignment -> ID EQUAL ID .)
+    OUT             reduce using rule 11 (assignment -> ID EQUAL ID .)
+    TERMINO         reduce using rule 11 (assignment -> ID EQUAL ID .)
+    VEZES           reduce using rule 11 (assignment -> ID EQUAL ID .)
+    FIM             reduce using rule 11 (assignment -> ID EQUAL ID .)
+    END_IF          reduce using rule 11 (assignment -> ID EQUAL ID .)
+    ELSE            reduce using rule 11 (assignment -> ID EQUAL ID .)
+    PLUS            shift and go to state 29
+    MULT            shift and go to state 30
+
+
+state 40
+
+    (12) assignment -> ID EQUAL NUMERO .
+    (16) arithmetic_expr -> NUMERO . PLUS ID
+    (19) arithmetic_expr -> NUMERO . MULT ID
+
+    ENQUANTO        reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    ID              reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    NUMERO          reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    IF              reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    ZERO            reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    EVAL            reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    OUT             reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    TERMINO         reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    VEZES           reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    FIM             reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    END_IF          reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    ELSE            reduce using rule 12 (assignment -> ID EQUAL NUMERO .)
+    PLUS            shift and go to state 31
+    MULT            shift and go to state 32
+
+
+state 41
+
+    (13) assignment -> ID EQUAL arithmetic_expr .
+
+    ENQUANTO        reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    ID              reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    NUMERO          reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    IF              reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    ZERO            reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    EVAL            reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    OUT             reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    TERMINO         reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    VEZES           reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    FIM             reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    END_IF          reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+    ELSE            reduce using rule 13 (assignment -> ID EQUAL arithmetic_expr .)
+
+
+state 42
+
+    (14) arithmetic_expr -> ID PLUS ID .
+
+    ENQUANTO        reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    ID              reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    NUMERO          reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    IF              reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    ZERO            reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    EVAL            reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    OUT             reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    TERMINO         reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    VEZES           reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    FIM             reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    END_IF          reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+    ELSE            reduce using rule 14 (arithmetic_expr -> ID PLUS ID .)
+
+
+state 43
+
+    (15) arithmetic_expr -> ID PLUS NUMERO .
+
+    ENQUANTO        reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    ID              reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    NUMERO          reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    IF              reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    ZERO            reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    EVAL            reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    OUT             reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    TERMINO         reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    VEZES           reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    FIM             reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    END_IF          reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+    ELSE            reduce using rule 15 (arithmetic_expr -> ID PLUS NUMERO .)
+
+
+state 44
+
+    (17) arithmetic_expr -> ID MULT ID .
+
+    ENQUANTO        reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    ID              reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    NUMERO          reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    IF              reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    ZERO            reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    EVAL            reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    OUT             reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    TERMINO         reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    VEZES           reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    FIM             reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    END_IF          reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+    ELSE            reduce using rule 17 (arithmetic_expr -> ID MULT ID .)
+
+
+state 45
+
+    (18) arithmetic_expr -> ID MULT NUMERO .
+
+    ENQUANTO        reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    ID              reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    NUMERO          reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    IF              reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    ZERO            reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    EVAL            reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    OUT             reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    TERMINO         reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    VEZES           reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    FIM             reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    END_IF          reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+    ELSE            reduce using rule 18 (arithmetic_expr -> ID MULT NUMERO .)
+
+
+state 46
+
+    (16) arithmetic_expr -> NUMERO PLUS ID .
+
+    ENQUANTO        reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    ID              reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    NUMERO          reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    IF              reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    ZERO            reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    EVAL            reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    OUT             reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    TERMINO         reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    VEZES           reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    FIM             reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    END_IF          reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+    ELSE            reduce using rule 16 (arithmetic_expr -> NUMERO PLUS ID .)
+
+
+state 47
+
+    (19) arithmetic_expr -> NUMERO MULT ID .
+
+    ENQUANTO        reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    ID              reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    NUMERO          reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    IF              reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    ZERO            reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    EVAL            reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    OUT             reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    TERMINO         reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    VEZES           reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    FIM             reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    END_IF          reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+    ELSE            reduce using rule 19 (arithmetic_expr -> NUMERO MULT ID .)
+
+
+state 48
+
+    (20) conditional -> IF condicao THEN . cmds END_IF
+    (21) conditional -> IF condicao THEN . cmds ELSE cmds END_IF
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    END_IF          reduce using rule 34 (empty -> .)
+    ELSE            reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmds                           shift and go to state 54
+    cmd                            shift and go to state 10
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    arithmetic_expr                shift and go to state 15
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 49
+
+    (28) condicao -> ID COMPARE . ID
+    (31) condicao -> ID COMPARE . NUMERO
+
+    ID              shift and go to state 55
+    NUMERO          shift and go to state 56
+
+
+state 50
+
+    (29) condicao -> ID GREATER . ID
+    (32) condicao -> ID GREATER . NUMERO
+
+    ID              shift and go to state 57
+    NUMERO          shift and go to state 58
+
+
+state 51
+
+    (30) condicao -> ID LESSER . ID
+    (33) condicao -> ID LESSER . NUMERO
+
+    ID              shift and go to state 59
+    NUMERO          shift and go to state 60
+
+
+state 52
+
+    (23) eval_statement -> EVAL cmds VEZES . arithmetic_expr FIM
+    (24) eval_statement -> EVAL cmds VEZES . ID FIM
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+
+    ID              shift and go to state 62
+    NUMERO          shift and go to state 20
+
+    arithmetic_expr                shift and go to state 61
+
+state 53
+
+    (4) cmd -> ENQUANTO ID FACA cmds . FIM
+
+    FIM             shift and go to state 63
+
+
+state 54
+
+    (20) conditional -> IF condicao THEN cmds . END_IF
+    (21) conditional -> IF condicao THEN cmds . ELSE cmds END_IF
+
+    END_IF          shift and go to state 64
+    ELSE            shift and go to state 65
+
+
+state 55
+
+    (28) condicao -> ID COMPARE ID .
+
+    THEN            reduce using rule 28 (condicao -> ID COMPARE ID .)
+
+
+state 56
+
+    (31) condicao -> ID COMPARE NUMERO .
+
+    THEN            reduce using rule 31 (condicao -> ID COMPARE NUMERO .)
+
+
+state 57
+
+    (29) condicao -> ID GREATER ID .
+
+    THEN            reduce using rule 29 (condicao -> ID GREATER ID .)
+
+
+state 58
+
+    (32) condicao -> ID GREATER NUMERO .
+
+    THEN            reduce using rule 32 (condicao -> ID GREATER NUMERO .)
+
+
+state 59
+
+    (30) condicao -> ID LESSER ID .
+
+    THEN            reduce using rule 30 (condicao -> ID LESSER ID .)
+
+
+state 60
+
+    (33) condicao -> ID LESSER NUMERO .
+
+    THEN            reduce using rule 33 (condicao -> ID LESSER NUMERO .)
+
+
+state 61
+
+    (23) eval_statement -> EVAL cmds VEZES arithmetic_expr . FIM
+
+    FIM             shift and go to state 66
+
+
+state 62
+
+    (24) eval_statement -> EVAL cmds VEZES ID . FIM
+    (14) arithmetic_expr -> ID . PLUS ID
+    (15) arithmetic_expr -> ID . PLUS NUMERO
+    (17) arithmetic_expr -> ID . MULT ID
+    (18) arithmetic_expr -> ID . MULT NUMERO
+
+    FIM             shift and go to state 67
+    PLUS            shift and go to state 29
+    MULT            shift and go to state 30
+
+
+state 63
+
+    (4) cmd -> ENQUANTO ID FACA cmds FIM .
+
+    ENQUANTO        reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    ID              reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    NUMERO          reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    IF              reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    ZERO            reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    EVAL            reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    OUT             reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    TERMINO         reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    VEZES           reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    FIM             reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    END_IF          reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+    ELSE            reduce using rule 4 (cmd -> ENQUANTO ID FACA cmds FIM .)
+
+
+state 64
+
+    (20) conditional -> IF condicao THEN cmds END_IF .
+
+    ENQUANTO        reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    ID              reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    NUMERO          reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    IF              reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    ZERO            reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    EVAL            reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    OUT             reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    TERMINO         reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    VEZES           reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    FIM             reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    END_IF          reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+    ELSE            reduce using rule 20 (conditional -> IF condicao THEN cmds END_IF .)
+
+
+state 65
+
+    (21) conditional -> IF condicao THEN cmds ELSE . cmds END_IF
+    (2) cmds -> . cmd cmds
+    (3) cmds -> . empty
+    (4) cmd -> . ENQUANTO ID FACA cmds FIM
+    (5) cmd -> . assignment
+    (6) cmd -> . arithmetic_expr
+    (7) cmd -> . conditional
+    (8) cmd -> . zero_statement
+    (9) cmd -> . eval_statement
+    (10) cmd -> . out_statement
+    (34) empty -> .
+    (11) assignment -> . ID EQUAL ID
+    (12) assignment -> . ID EQUAL NUMERO
+    (13) assignment -> . ID EQUAL arithmetic_expr
+    (14) arithmetic_expr -> . ID PLUS ID
+    (15) arithmetic_expr -> . ID PLUS NUMERO
+    (16) arithmetic_expr -> . NUMERO PLUS ID
+    (17) arithmetic_expr -> . ID MULT ID
+    (18) arithmetic_expr -> . ID MULT NUMERO
+    (19) arithmetic_expr -> . NUMERO MULT ID
+    (20) conditional -> . IF condicao THEN cmds END_IF
+    (21) conditional -> . IF condicao THEN cmds ELSE cmds END_IF
+    (22) zero_statement -> . ZERO ID
+    (23) eval_statement -> . EVAL cmds VEZES arithmetic_expr FIM
+    (24) eval_statement -> . EVAL cmds VEZES ID FIM
+    (25) out_statement -> . OUT ID
+
+    ENQUANTO        shift and go to state 12
+    END_IF          reduce using rule 34 (empty -> .)
+    ID              shift and go to state 13
+    NUMERO          shift and go to state 20
+    IF              shift and go to state 21
+    ZERO            shift and go to state 22
+    EVAL            shift and go to state 23
+    OUT             shift and go to state 24
+
+    cmds                           shift and go to state 68
+    cmd                            shift and go to state 10
+    empty                          shift and go to state 11
+    assignment                     shift and go to state 14
+    arithmetic_expr                shift and go to state 15
+    conditional                    shift and go to state 16
+    zero_statement                 shift and go to state 17
+    eval_statement                 shift and go to state 18
+    out_statement                  shift and go to state 19
+
+state 66
+
+    (23) eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .
+
+    ENQUANTO        reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    ID              reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    NUMERO          reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    IF              reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    ZERO            reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    EVAL            reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    OUT             reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    TERMINO         reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    VEZES           reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    FIM             reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    END_IF          reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+    ELSE            reduce using rule 23 (eval_statement -> EVAL cmds VEZES arithmetic_expr FIM .)
+
+
+state 67
+
+    (24) eval_statement -> EVAL cmds VEZES ID FIM .
+
+    ENQUANTO        reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    ID              reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    NUMERO          reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    IF              reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    ZERO            reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    EVAL            reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    OUT             reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    TERMINO         reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    VEZES           reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    FIM             reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    END_IF          reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+    ELSE            reduce using rule 24 (eval_statement -> EVAL cmds VEZES ID FIM .)
+
+
+state 68
+
+    (21) conditional -> IF condicao THEN cmds ELSE cmds . END_IF
+
+    END_IF          shift and go to state 69
+
+
+state 69
+
+    (21) conditional -> IF condicao THEN cmds ELSE cmds END_IF .
+
+    ENQUANTO        reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    ID              reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    NUMERO          reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    IF              reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    ZERO            reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    EVAL            reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    OUT             reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    TERMINO         reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    VEZES           reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    FIM             reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    END_IF          reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+    ELSE            reduce using rule 21 (conditional -> IF condicao THEN cmds ELSE cmds END_IF .)
+
