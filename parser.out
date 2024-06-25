@@ -684,7 +684,8 @@ state 38
     (13) arithmetic_expr -> arithmetic_expr . PLUS arithmetic_expr
     (14) arithmetic_expr -> arithmetic_expr . MULT arithmetic_expr
 
-    PLUS            reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MULT resolved as shift
     ENQUANTO        reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
     ID              reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
     OPEN_PAREN      reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
@@ -698,10 +699,11 @@ state 38
     END_IF          reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
     ELSE            reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
     CLOSE_PAREN     reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .)
+    PLUS            shift and go to state 28
     MULT            shift and go to state 29
 
+  ! PLUS            [ reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .) ]
   ! MULT            [ reduce using rule 13 (arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr .) ]
-  ! PLUS            [ shift and go to state 28 ]
 
 
 state 39
@@ -710,8 +712,8 @@ state 39
     (13) arithmetic_expr -> arithmetic_expr . PLUS arithmetic_expr
     (14) arithmetic_expr -> arithmetic_expr . MULT arithmetic_expr
 
-    PLUS            reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
-    MULT            reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MULT resolved as shift
     ENQUANTO        reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
     ID              reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
     OPEN_PAREN      reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
@@ -725,9 +727,11 @@ state 39
     END_IF          reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
     ELSE            reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
     CLOSE_PAREN     reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .)
+    PLUS            shift and go to state 28
+    MULT            shift and go to state 29
 
-  ! PLUS            [ shift and go to state 28 ]
-  ! MULT            [ shift and go to state 29 ]
+  ! PLUS            [ reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .) ]
+  ! MULT            [ reduce using rule 14 (arithmetic_expr -> arithmetic_expr MULT arithmetic_expr .) ]
 
 
 state 40
@@ -1260,6 +1264,10 @@ state 68
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 38 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 38 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 39 resolved as shift
+WARNING: shift/reduce conflict for MULT in state 39 resolved as shift
 WARNING: shift/reduce conflict for FIM in state 59 resolved as shift
 WARNING: shift/reduce conflict for FIM in state 60 resolved as shift
 WARNING: reduce/reduce conflict in state 44 resolved using rule (assignment -> ID EQUAL ID)

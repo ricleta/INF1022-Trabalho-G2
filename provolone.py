@@ -76,16 +76,17 @@ def t_error(t):
     print(f"Illegal character '{t.value[0]}'")
     t.lexer.skip(1)
 
-# Precedence and associativity of operators
-precedence = (
-    ('left', 'PLUS'),
-    ('left', 'MULT'),
-)
-
 # Grammar rules
 def p_programa(p):
     '''programa : INICIO varlist MONITOR idlist EXECUTE cmds TERMINO '''
-    p[0] = f"#include <stdio.h>\nint main() {{\n{p[2]}\n{p[4]}\n{p[6]}\nreturn 0;\n}}"
+    show_monitored = "// Monitored vars = "
+    for var in monitored_vars:
+        show_monitored += f" {var[0]}"
+    for var in monitored_vars:
+        show_monitored += f'\nprintf("{var[0]} = %d\\n", {var[0]})'
+    show_monitored += "\n"
+    
+    p[0] = f"#include <stdio.h>\nint main() {{\n{p[2]}\n{show_monitored}\n{p[6]}\nreturn 0;\n}}"
     print(f"Programa reconhecido: {p[0:]}")
 
 def p_cmds(p):
@@ -107,6 +108,7 @@ def p_cmd(p):
             | eval_statement
     '''
     p[0] = f"{p[1]};"
+    print(f"####### Monitored vars: {monitored_vars}")
     for var in monitored_vars:
         if monitored_vars[var] == 1:
             p[0] += f"\nprintf(\"{var} = %d\\n\", {var});\n"
@@ -120,6 +122,8 @@ def p_assignment(p):
     '''
     print(f"Antes de p[0] assignment reconhecido {p[0:]}")
     p[0] = f"{p[1]} = {p[3]}"
+    if p[1] in monitored_vars:
+        monitored_vars[p[1]] = 1
     print(f"Assignment reconhecido {p[0:]}")
 
 def p_arithmetic_expr(p):
@@ -132,16 +136,11 @@ def p_arithmetic_expr(p):
     print(f"Antes Expressão aritmética reconhecida {p[0:]}")
     if len(p) == 4 and p[1] == '(' and p[3] == ')':
         p[0] = f"({p[2]})"
-        if p[2] in monitored_vars:
-            monitored_vars[p[2]] = 1
     elif len(p) == 4:
         p[0] = f"{p[1]} {p[2]} {p[3]}"
-        if p[1] in monitored_vars:
-            monitored_vars[p[1]] = 1
     else:
         p[0] = p[1]
-        if p[1] in monitored_vars:
-            monitored_vars[p[1]] = 1
+ 
     print(f"Expressão aritmética reconhecida {p[0:]}")
 
 def p_conditional(p):
@@ -195,13 +194,10 @@ def p_condicao(p):
 def p_idlist(p):
     '''idlist : ID idlist
               | ID'''
-    for var in p[1:]:
-        if var is not None and len(monitored_vars) == 0 and p[0] is None:
-            monitored_vars[var] = 0
-            p[0] = f"// Monitored vars: {var} "
-        elif var is not None:
-            monitored_vars[var] = 0
-            p[0] += f"{var} "
+    if len(monitored_vars) == 0 and p[0] is None:
+        monitored_vars[p[1]] = 0
+    else:
+        monitored_vars[p[1]] = 0
     
     print(f"Idlist reconhecida {p[0:]}")
 

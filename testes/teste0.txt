@@ -1,6 +1,6 @@
 INICIO
 a b c
-MONITOR a b 
+MONITOR a 
 EXECUTE
 a = 1
 b = (a + 5) * (10 + 2)
