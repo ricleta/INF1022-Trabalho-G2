@@ -10,5 +10,8 @@ printf("a = %d\n", a)
 a = 1;
 printf("a = %d\n", a);
 b = (a + 5) * (10 + 2);
+a = 0;
+printf("a = %d\n", a);
+
 return 0;
 }

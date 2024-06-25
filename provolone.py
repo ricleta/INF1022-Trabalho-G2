@@ -5,7 +5,7 @@ import ply.yacc as yacc
 tokens = (
     'INICIO', 'MONITOR', 'EXECUTE', 'TERMINO', 
     'ENQUANTO', 'FACA', 'FIM', 'ID', 'NUMERO',
-    'PLUS', 'EQUAL', 'MULT', 
+    'PLUS', 'EQUAL', 'MULT',
     'IF', 'THEN', 'ELSE', 
     'ZERO', 'EVAL', 'VEZES', 
     'COMPARE', 'GREATER', 'LESSER',
@@ -68,13 +68,19 @@ reserved = {
     'LESSER': 'LESSER',
     'END_IF': 'END_IF',
     'OPEN_PAREN': 'OPEN_PAREN',
-    'CLose_PAREN': 'CLOSE_PAREN',
+    'CLOSE_PAREN': 'CLOSE_PAREN',
 }
 
 # Error handling for unknown characters
 def t_error(t):
     print(f"Illegal character '{t.value[0]}'")
     t.lexer.skip(1)
+
+# Define operator precedence and associativity
+precedence = (
+    ('left', 'PLUS'),
+    ('left', 'MULT'),
+)
 
 # Grammar rules
 def p_programa(p):
@@ -87,7 +93,6 @@ def p_programa(p):
     show_monitored += "\n"
     
     p[0] = f"#include <stdio.h>\nint main() {{\n{p[2]}\n{show_monitored}\n{p[6]}\nreturn 0;\n}}"
-    print(f"Programa reconhecido: {p[0:]}")
 
 def p_cmds(p):
     '''cmds : cmd cmds
@@ -97,7 +102,6 @@ def p_cmds(p):
             p[0] = cmd
         elif cmd is not None:
             p[0] += cmd
-    print(f"Cmds reconhecido {p[0:]}")
 
 def p_cmd(p):
     ''' cmd : while_statement
@@ -108,32 +112,30 @@ def p_cmd(p):
             | eval_statement
     '''
     p[0] = f"{p[1]};"
-    print(f"####### Monitored vars: {monitored_vars}")
     for var in monitored_vars:
         if monitored_vars[var] == 1:
             p[0] += f"\nprintf(\"{var} = %d\\n\", {var});\n"
             monitored_vars[var] = 0
-    print(f"Cmd reconhecido {p[0:]}")
 
-def p_assignment(p):
-    ''' assignment : ID EQUAL ID 
-                    | ID EQUAL NUMERO 
-                    | ID EQUAL arithmetic_expr
+def p_term(p):
+    '''term : ID 
+            | NUMERO
     '''
-    print(f"Antes de p[0] assignment reconhecido {p[0:]}")
+    p[0] = p[1]
+    
+def p_assignment(p):
+    ''' assignment : ID EQUAL arithmetic_expr
+    '''
     p[0] = f"{p[1]} = {p[3]}"
     if p[1] in monitored_vars:
         monitored_vars[p[1]] = 1
-    print(f"Assignment reconhecido {p[0:]}")
 
 def p_arithmetic_expr(p):
     ''' arithmetic_expr : arithmetic_expr PLUS arithmetic_expr
                         | arithmetic_expr MULT arithmetic_expr
                         | OPEN_PAREN arithmetic_expr CLOSE_PAREN
-                        | ID
-                        | NUMERO
+                        | term
     '''
-    print(f"Antes Expressão aritmética reconhecida {p[0:]}")
     if len(p) == 4 and p[1] == '(' and p[3] == ')':
         p[0] = f"({p[2]})"
     elif len(p) == 4:
@@ -141,8 +143,6 @@ def p_arithmetic_expr(p):
     else:
         p[0] = p[1]
  
-    print(f"Expressão aritmética reconhecida {p[0:]}")
-
 def p_conditional(p):
     ''' conditional : IF condicao THEN cmds END_IF
                     | IF condicao THEN cmds ELSE cmds END_IF'''
@@ -150,25 +150,21 @@ def p_conditional(p):
         p[0] = f"\nif ({p[2]}) {{\n{p[4]}\n}}"
     else:
         p[0] = f"\nif ({p[2]}) {{\n{p[4]}\n}} else {{\n{p[6]}\n}}" 
-    print(f"Condicional reconhecido {p[0:]}")
 
 def p_while_statement(p):
     ''' while_statement : ENQUANTO condicao FACA cmds FIM '''
     p[0] = f"while ({p[2]}) {{\n{p[4]}\n}}"
-    print(f"While statement reconhecido {p[0:]}")
 
 def p_zero_statement(p):
-    ''' zero_statement : ZERO ID '''
-    p[0] = f"{p[2]} = 0"
-    print(f"Zero statement reconhecido {p[0:]}")
+    ''' zero_statement : ZERO OPEN_PAREN ID CLOSE_PAREN'''
+    p[0] = f"\n{p[3]} = 0"
+    if p[3] in monitored_vars:
+        monitored_vars[p[3]] = 1
 
 def p_eval_statement(p):
     ''' eval_statement : EVAL cmds VEZES arithmetic_expr FIM 
-                       | EVAL cmds VEZES ID FIM 
-                       | EVAL cmds VEZES NUMERO FIM
     '''
     p[0] = f"for (int i = 0; i < {p[4]}; i++) {{\n{p[2]}\n}}"
-    print(f"Eval statement reconhecido {p[0:]}")
 
 def p_varlist(p):
     '''varlist : ID varlist
@@ -179,8 +175,6 @@ def p_varlist(p):
         elif var is not None:
             p[0] += f"{var}"
 
-    print(f"Varlist reconhecida {p[0:]}")
-
 def p_condicao(p):
     '''condicao : ID COMPARE ID
                 | ID GREATER ID
@@ -189,7 +183,6 @@ def p_condicao(p):
                 | ID GREATER NUMERO
                 | ID LESSER NUMERO'''
     p[0] = f"{p[1]} {p[2]} {p[3]}"
-    print(f"Condição reconhecida {p[0:]}")
 
 def p_idlist(p):
     '''idlist : ID idlist
@@ -199,8 +192,6 @@ def p_idlist(p):
     else:
         monitored_vars[p[1]] = 0
     
-    print(f"Idlist reconhecida {p[0:]}")
-
 def p_error(p):
     print(f"Syntax error at '{p.value}'")
 
@@ -218,4 +209,3 @@ out_text = parser.parse(in_file)
 out_file.write(out_text)
 
 out_file.close()
-print(monitored_vars)
