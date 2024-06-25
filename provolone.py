@@ -5,7 +5,7 @@ import ply.yacc as yacc
 tokens = (
     'INICIO', 'MONITOR', 'EXECUTE', 'TERMINO', 
     'ENQUANTO', 'FACA', 'FIM', 'ID', 'NUMERO',
-    'PLUS', 'EQUAL', 'MULT',
+    'PLUS', 'EQUAL', 'MULT', 'DIV', 'MINUS',
     'IF', 'THEN', 'ELSE', 
     'ZERO', 'EVAL', 'VEZES', 
     'COMPARE', 'GREATER', 'LESSER',
@@ -28,11 +28,13 @@ t_ZERO = r'ZERO'
 t_EVAL = r'EVAL'
 t_VEZES = r'VEZES'
 t_COMPARE = r'=='
-t_GREATER = r'GREATER'
-t_LESSER = r'LESSER'
+t_GREATER = r'>'
+t_LESSER = r'<'
 t_PLUS = r'\+'
+t_MINUS = r'-'
 t_EQUAL = r'='
 t_MULT = r'\*'
+t_DIV = r'/'
 t_NUMERO = r'\d+'
 t_OPEN_PAREN = r'\('
 t_CLOSE_PAREN = r'\)'
@@ -77,9 +79,13 @@ def t_error(t):
     t.lexer.skip(1)
 
 # Define operator precedence and associativity
+'''
+Necessário para remover conflitos shift/reduce em arithmetic_expr, 
+mais detalhes no relatório
+'''
 precedence = (
-    ('left', 'PLUS'),
-    ('left', 'MULT'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MULT', 'DIV'),
 )
 
 # Grammar rules
@@ -106,7 +112,6 @@ def p_cmds(p):
 def p_cmd(p):
     ''' cmd : while_statement
             | assignment
-            | arithmetic_expr
             | conditional
             | zero_statement
             | eval_statement
@@ -133,6 +138,8 @@ def p_assignment(p):
 def p_arithmetic_expr(p):
     ''' arithmetic_expr : arithmetic_expr PLUS arithmetic_expr
                         | arithmetic_expr MULT arithmetic_expr
+                        | arithmetic_expr MINUS arithmetic_expr
+                        | arithmetic_expr DIV arithmetic_expr
                         | OPEN_PAREN arithmetic_expr CLOSE_PAREN
                         | term
     '''
@@ -176,12 +183,10 @@ def p_varlist(p):
             p[0] += f"{var}"
 
 def p_condicao(p):
-    '''condicao : ID COMPARE ID
-                | ID GREATER ID
-                | ID LESSER ID
-                | ID COMPARE NUMERO
-                | ID GREATER NUMERO
-                | ID LESSER NUMERO'''
+    '''condicao : arithmetic_expr COMPARE arithmetic_expr
+                | arithmetic_expr GREATER arithmetic_expr
+                | arithmetic_expr LESSER arithmetic_expr
+    '''
     p[0] = f"{p[1]} {p[2]} {p[3]}"
 
 def p_idlist(p):
@@ -199,8 +204,9 @@ def p_error(p):
 lexer = lex.lex()
 parser = yacc.yacc()
 
-in_file = open("testes/teste0.txt", "r").read()
-out_file = open("results/teste0.c", "w")
+teste_file_name = input("Digite o nome do arquivo de teste (sem o .txt): ")
+in_file = open(f"testes/{teste_file_name}.txt", "r").read()
+out_file = open(f"results/{teste_file_name}.c", "w")
 
 # Parse input program
 lexer.input(in_file)

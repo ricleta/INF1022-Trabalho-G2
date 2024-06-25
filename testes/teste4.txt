@@ -1,0 +1,10 @@
+INICIO
+x y
+MONITOR x 
+EXECUTE
+x = 20
+EVAL
+    y = x * 2
+    ZERO(x)
+VEZES 3 FIM
+TERMINO

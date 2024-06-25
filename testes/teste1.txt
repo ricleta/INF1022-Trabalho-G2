@@ -1,10 +1,7 @@
-INICIO X, Y
-MONITOR Z
+INICIO
+x y
+MONITOR x 
 EXECUTE
-Y = 2
-X = 5
-Z = Y
-ENQUANTO X FACA
-Z = Z + 1
-FIM
+x = 10
+y = 2 * x + 5
 TERMINO

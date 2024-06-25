@@ -1,0 +1,12 @@
+INICIO
+a b c
+MONITOR c 
+EXECUTE
+a = 10
+b = 20
+IF a * b > 150 THEN
+    c = a + b
+ELSE
+    c = a - b
+END_IF
+TERMINO
