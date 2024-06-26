@@ -1,13 +1,9 @@
-INICIO X, Y, L
-MONITOR Z
+INICIO counter result
+MONITOR result 
 EXECUTE
-ZERO(Z)
-X = 5
-Y = 0
-L = 1
-IF Y THEN
-Z = EVAL(X, L, Z=Z*L) 
-ELSE
-Z = EVAL(X, L, Z=Z*X)
+counter = 0
+ENQUANTO counter < 5 FACA 
+result = result + counter 
+counter = counter + 1
 FIM
 TERMINO

@@ -2,23 +2,16 @@
 int main() {
 int a = 0;
 int b = 0;
+int c = 0;
 
-// int b = 0;
+// Monitored vars =  a
+printf("a = %d\n", a)
 
-a = 10;b = a;
-if (a == 10) 
-{
-    if (b == a) 
-    {
-        b = b + 1;
-    };
-} 
-else 
-{
-    a + 2;
-};
+a = 1;
+printf("a = %d\n", a);
+b = (a + 5) * (10 + 2);
+a = 0;
+printf("a = %d\n", a);
 
-printf("%d\n", a);
-printf("%d\n", b);
 return 0;
 }

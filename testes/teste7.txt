@@ -1,0 +1,12 @@
+INICIO X Y B Z
+MONITOR Z
+EXECUTE
+X = 5
+Y = 2
+B = 0
+EVAL
+    IF B THEN Z = Z + 2
+    ELSE Z = Z + 1 END_IF
+VEZES X - Y
+FIM
+TERMINO

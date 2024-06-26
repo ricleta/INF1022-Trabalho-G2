@@ -1,8 +1,8 @@
 INICIO
-a b 
-MONITOR b 
+a b c
+MONITOR a 
 EXECUTE
-a = 10
-b = a + 5
-IF a == 10 THEN IF b == a THEN b = b + 1 END_IF ELSE a + 2 END_IF    
+a = 1
+b = (a + 5) * (10 + 2)
+ZERO(a)
 TERMINO

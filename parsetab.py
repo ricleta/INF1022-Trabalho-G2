@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSleftMULTCOMPARE ELSE END_IF ENQUANTO EQUAL EVAL EXECUTE FACA FIM GREATER ID IF INICIO LESSER MONITOR MULT NUMERO OUT PLUS TERMINO THEN VEZES ZEROprograma : INICIO varlist MONITOR varlist EXECUTE cmds TERMINO cmds : cmd cmds\n            | empty cmd : ENQUANTO ID FACA cmds FIM\n            | assignment\n            | arithmetic_expr\n            | conditional\n            | zero_statement\n            | eval_statement\n            | out_statement\n     assignment : ID EQUAL ID \n                    | ID EQUAL NUMERO \n                    | ID EQUAL arithmetic_expr\n     arithmetic_expr : ID PLUS ID \n                        | ID PLUS NUMERO \n                        | NUMERO PLUS ID\n                        | ID MULT ID \n                        | ID MULT NUMERO \n                        | NUMERO MULT ID  conditional : IF condicao THEN cmds END_IF\n                    | IF condicao THEN cmds ELSE cmds END_IF zero_statement : ZERO ID  eval_statement : EVAL cmds VEZES arithmetic_expr FIM \n                       | EVAL cmds VEZES ID FIM  out_statement : OUT ID varlist : ID varlist\n                | IDcondicao : ID COMPARE ID\n                | ID GREATER ID\n                | ID LESSER ID\n                | ID COMPARE NUMERO\n                | ID GREATER NUMERO\n                | ID LESSER NUMEROempty :'
+_lr_signature = 'leftPLUSMINUSleftMULTDIVCLOSE_PAREN COMPARE DIV ELSE END_IF ENQUANTO EQUAL EVAL EXECUTE FACA FIM GREATER ID IF INICIO LESSER MINUS MONITOR MULT NUMERO OPEN_PAREN PLUS TERMINO THEN VEZES ZEROprograma : INICIO varlist MONITOR idlist EXECUTE cmds TERMINO cmds : cmd cmds\n            | cmd cmd : while_statement\n            | assignment\n            | conditional\n            | zero_statement\n            | eval_statement\n    term : ID \n            | NUMERO\n     assignment : ID EQUAL arithmetic_expr\n     arithmetic_expr : arithmetic_expr PLUS arithmetic_expr\n                        | arithmetic_expr MULT arithmetic_expr\n                        | arithmetic_expr MINUS arithmetic_expr\n                        | arithmetic_expr DIV arithmetic_expr\n                        | OPEN_PAREN arithmetic_expr CLOSE_PAREN\n                        | term\n     conditional : IF condicao THEN cmds END_IF\n                    | IF condicao THEN cmds ELSE cmds END_IF while_statement : ENQUANTO condicao FACA cmds FIM  zero_statement : ZERO OPEN_PAREN ID CLOSE_PAREN eval_statement : EVAL cmds VEZES arithmetic_expr FIM \n    varlist : ID varlist\n                | IDcondicao : arithmetic_expr COMPARE arithmetic_expr\n                | arithmetic_expr GREATER arithmetic_expr\n                | arithmetic_expr LESSER arithmetic_expr\n                | ID\n    idlist : ID idlist\n              | ID'
     
-_lr_action_items = {'INICIO':([0,],[2,]),'$end':([1,25,],[0,-1,]),'ID':([2,4,5,8,10,12,14,15,16,17,18,19,21,22,23,24,28,29,30,31,32,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,63,64,65,66,67,69,],[4,4,4,13,13,27,-5,-6,-7,-8,-9,-10,34,35,13,37,39,42,44,46,47,-22,-25,13,-11,-12,-13,-14,-15,-17,-18,-16,-19,13,55,57,59,62,-4,-20,13,-23,-24,-21,]),'MONITOR':([3,4,6,],[5,-27,-26,]),'EXECUTE':([4,6,7,],[-27,-26,8,]),'ENQUANTO':([8,10,14,15,16,17,18,19,23,35,37,38,39,40,41,42,43,44,45,46,47,48,63,64,65,66,67,69,],[12,12,-5,-6,-7,-8,-9,-10,12,-22,-25,12,-11,-12,-13,-14,-15,-17,-18,-16,-19,12,-4,-20,12,-23,-24,-21,]),'TERMINO':([8,9,10,11,14,15,16,17,18,19,26,35,37,39,40,41,42,43,44,45,46,47,63,64,66,67,69,],[-34,25,-34,-3,-5,-6,-7,-8,-9,-10,-2,-22,-25,-11,-12,-13,-14,-15,-17,-18,-16,-19,-4,-20,-23,-24,-21,]),'NUMERO':([8,10,14,15,16,17,18,19,23,28,29,30,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,63,64,65,66,67,69,],[20,20,-5,-6,-7,-8,-9,-10,20,40,43,45,-22,-25,20,-11,-12,-13,-14,-15,-17,-18,-16,-19,20,56,58,60,20,-4,-20,20,-23,-24,-21,]),'IF':([8,10,14,15,16,17,18,19,23,35,37,38,39,40,41,42,43,44,45,46,47,48,63,64,65,66,67,69,],[21,21,-5,-6,-7,-8,-9,-10,21,-22,-25,21,-11,-12,-13,-14,-15,-17,-18,-16,-19,21,-4,-20,21,-23,-24,-21,]),'ZERO':([8,10,14,15,16,17,18,19,23,35,37,38,39,40,41,42,43,44,45,46,47,48,63,64,65,66,67,69,],[22,22,-5,-6,-7,-8,-9,-10,22,-22,-25,22,-11,-12,-13,-14,-15,-17,-18,-16,-19,22,-4,-20,22,-23,-24,-21,]),'EVAL':([8,10,14,15,16,17,18,19,23,35,37,38,39,40,41,42,43,44,45,46,47,48,63,64,65,66,67,69,],[23,23,-5,-6,-7,-8,-9,-10,23,-22,-25,23,-11,-12,-13,-14,-15,-17,-18,-16,-19,23,-4,-20,23,-23,-24,-21,]),'OUT':([8,10,14,15,16,17,18,19,23,35,37,38,39,40,41,42,43,44,45,46,47,48,63,64,65,66,67,69,],[24,24,-5,-6,-7,-8,-9,-10,24,-22,-25,24,-11,-12,-13,-14,-15,-17,-18,-16,-19,24,-4,-20,24,-23,-24,-21,]),'VEZES':([10,11,14,15,16,17,18,19,23,26,35,36,37,39,40,41,42,43,44,45,46,47,63,64,66,67,69,],[-34,-3,-5,-6,-7,-8,-9,-10,-34,-2,-22,52,-25,-11,-12,-13,-14,-15,-17,-18,-16,-19,-4,-20,-23,-24,-21,]),'FIM':([10,11,14,15,16,17,18,19,26,35,37,38,39,40,41,42,43,44,45,46,47,53,61,62,63,64,66,67,69,],[-34,-3,-5,-6,-7,-8,-9,-10,-2,-22,-25,-34,-11,-12,-13,-14,-15,-17,-18,-16,-19,63,66,67,-4,-20,-23,-24,-21,]),'END_IF':([10,11,14,15,16,17,18,19,26,35,37,39,40,41,42,43,44,45,46,47,48,54,63,64,65,66,67,68,69,],[-34,-3,-5,-6,-7,-8,-9,-10,-2,-22,-25,-11,-12,-13,-14,-15,-17,-18,-16,-19,-34,64,-4,-20,-34,-23,-24,69,-21,]),'ELSE':([10,11,14,15,16,17,18,19,26,35,37,39,40,41,42,43,44,45,46,47,48,54,63,64,66,67,69,],[-34,-3,-5,-6,-7,-8,-9,-10,-2,-22,-25,-11,-12,-13,-14,-15,-17,-18,-16,-19,-34,65,-4,-20,-23,-24,-21,]),'EQUAL':([13,],[28,]),'PLUS':([13,20,39,40,62,],[29,31,29,31,29,]),'MULT':([13,20,39,40,62,],[30,32,30,32,30,]),'FACA':([27,],[38,]),'THEN':([33,55,56,57,58,59,60,],[48,-28,-31,-29,-32,-30,-33,]),'COMPARE':([34,],[49,]),'GREATER':([34,],[50,]),'LESSER':([34,],[51,]),}
+_lr_action_items = {'INICIO':([0,],[2,]),'$end':([1,23,],[0,-1,]),'ID':([2,4,5,8,9,12,13,14,15,16,17,18,20,22,28,29,30,31,33,35,36,37,38,39,40,41,42,44,45,46,48,53,54,55,56,57,59,61,62,63,64,66,],[4,4,8,8,19,19,-4,-5,-6,-7,-8,27,27,19,44,-17,-10,44,47,19,44,44,44,44,44,44,44,-9,-11,19,44,-12,-13,-14,-15,-16,-21,-20,-18,19,-22,-19,]),'MONITOR':([3,4,6,],[5,-24,-23,]),'EXECUTE':([7,8,10,],[9,-30,-29,]),'ENQUANTO':([9,12,13,14,15,16,17,22,29,30,35,44,45,46,53,54,55,56,57,59,61,62,63,64,66,],[18,18,-4,-5,-6,-7,-8,18,-17,-10,18,-9,-11,18,-12,-13,-14,-15,-16,-21,-20,-18,18,-22,-19,]),'IF':([9,12,13,14,15,16,17,22,29,30,35,44,45,46,53,54,55,56,57,59,61,62,63,64,66,],[20,20,-4,-5,-6,-7,-8,20,-17,-10,20,-9,-11,20,-12,-13,-14,-15,-16,-21,-20,-18,20,-22,-19,]),'ZERO':([9,12,13,14,15,16,17,22,29,30,35,44,45,46,53,54,55,56,57,59,61,62,63,64,66,],[21,21,-4,-5,-6,-7,-8,21,-17,-10,21,-9,-11,21,-12,-13,-14,-15,-16,-21,-20,-18,21,-22,-19,]),'EVAL':([9,12,13,14,15,16,17,22,29,30,35,44,45,46,53,54,55,56,57,59,61,62,63,64,66,],[22,22,-4,-5,-6,-7,-8,22,-17,-10,22,-9,-11,22,-12,-13,-14,-15,-16,-21,-20,-18,22,-22,-19,]),'TERMINO':([11,12,13,14,15,16,17,24,29,30,44,45,53,54,55,56,57,59,61,62,64,66,],[23,-3,-4,-5,-6,-7,-8,-2,-17,-10,-9,-11,-12,-13,-14,-15,-16,-21,-20,-18,-22,-19,]),'VEZES':([12,13,14,15,16,17,24,29,30,34,44,45,53,54,55,56,57,59,61,62,64,66,],[-3,-4,-5,-6,-7,-8,-2,-17,-10,48,-9,-11,-12,-13,-14,-15,-16,-21,-20,-18,-22,-19,]),'FIM':([12,13,14,15,16,17,24,29,30,44,45,49,53,54,55,56,57,59,60,61,62,64,66,],[-3,-4,-5,-6,-7,-8,-2,-17,-10,-9,-11,61,-12,-13,-14,-15,-16,-21,64,-20,-18,-22,-19,]),'END_IF':([12,13,14,15,16,17,24,29,30,44,45,53,54,55,56,57,58,59,61,62,64,65,66,],[-3,-4,-5,-6,-7,-8,-2,-17,-10,-9,-11,-12,-13,-14,-15,-16,62,-21,-20,-18,-22,66,-19,]),'ELSE':([12,13,14,15,16,17,24,29,30,44,45,53,54,55,56,57,58,59,61,62,64,66,],[-3,-4,-5,-6,-7,-8,-2,-17,-10,-9,-11,-12,-13,-14,-15,-16,63,-21,-20,-18,-22,-19,]),'OPEN_PAREN':([18,20,21,28,31,36,37,38,39,40,41,42,48,],[28,28,33,28,28,28,28,28,28,28,28,28,28,]),'NUMERO':([18,20,28,31,36,37,38,39,40,41,42,48,],[30,30,30,30,30,30,30,30,30,30,30,30,]),'EQUAL':([19,],[31,]),'FACA':([25,27,29,30,44,50,51,52,53,54,55,56,57,],[35,-28,-17,-10,-9,-25,-26,-27,-12,-13,-14,-15,-16,]),'COMPARE':([26,27,29,30,44,53,54,55,56,57,],[36,-9,-17,-10,-9,-12,-13,-14,-15,-16,]),'GREATER':([26,27,29,30,44,53,54,55,56,57,],[37,-9,-17,-10,-9,-12,-13,-14,-15,-16,]),'LESSER':([26,27,29,30,44,53,54,55,56,57,],[38,-9,-17,-10,-9,-12,-13,-14,-15,-16,]),'PLUS':([26,27,29,30,43,44,45,50,51,52,53,54,55,56,57,60,],[39,-9,-17,-10,39,-9,39,39,39,39,-12,-13,-14,-15,-16,39,]),'MULT':([26,27,29,30,43,44,45,50,51,52,53,54,55,56,57,60,],[40,-9,-17,-10,40,-9,40,40,40,40,40,-13,40,-15,-16,40,]),'MINUS':([26,27,29,30,43,44,45,50,51,52,53,54,55,56,57,60,],[41,-9,-17,-10,41,-9,41,41,41,41,-12,-13,-14,-15,-16,41,]),'DIV':([26,27,29,30,43,44,45,50,51,52,53,54,55,56,57,60,],[42,-9,-17,-10,42,-9,42,42,42,42,42,-13,42,-15,-16,42,]),'THEN':([27,29,30,32,44,50,51,52,53,54,55,56,57,],[-28,-17,-10,46,-9,-25,-26,-27,-12,-13,-14,-15,-16,]),'CLOSE_PAREN':([29,30,43,44,47,53,54,55,56,57,],[-17,-10,57,-9,59,-12,-13,-14,-15,-16,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'programa':([0,],[1,]),'varlist':([2,4,5,],[3,6,7,]),'cmds':([8,10,23,38,48,65,],[9,26,36,53,54,68,]),'cmd':([8,10,23,38,48,65,],[10,10,10,10,10,10,]),'empty':([8,10,23,38,48,65,],[11,11,11,11,11,11,]),'assignment':([8,10,23,38,48,65,],[14,14,14,14,14,14,]),'arithmetic_expr':([8,10,23,28,38,48,52,65,],[15,15,15,41,15,15,61,15,]),'conditional':([8,10,23,38,48,65,],[16,16,16,16,16,16,]),'zero_statement':([8,10,23,38,48,65,],[17,17,17,17,17,17,]),'eval_statement':([8,10,23,38,48,65,],[18,18,18,18,18,18,]),'out_statement':([8,10,23,38,48,65,],[19,19,19,19,19,19,]),'condicao':([21,],[33,]),}
+_lr_goto_items = {'programa':([0,],[1,]),'varlist':([2,4,],[3,6,]),'idlist':([5,8,],[7,10,]),'cmds':([9,12,22,35,46,63,],[11,24,34,49,58,65,]),'cmd':([9,12,22,35,46,63,],[12,12,12,12,12,12,]),'while_statement':([9,12,22,35,46,63,],[13,13,13,13,13,13,]),'assignment':([9,12,22,35,46,63,],[14,14,14,14,14,14,]),'conditional':([9,12,22,35,46,63,],[15,15,15,15,15,15,]),'zero_statement':([9,12,22,35,46,63,],[16,16,16,16,16,16,]),'eval_statement':([9,12,22,35,46,63,],[17,17,17,17,17,17,]),'condicao':([18,20,],[25,32,]),'arithmetic_expr':([18,20,28,31,36,37,38,39,40,41,42,48,],[26,26,43,45,50,51,52,53,54,55,56,60,]),'term':([18,20,28,31,36,37,38,39,40,41,42,48,],[29,29,29,29,29,29,29,29,29,29,29,29,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,38 +27,34 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> programa","S'",1,None,None,None),
-  ('programa -> INICIO varlist MONITOR varlist EXECUTE cmds TERMINO','programa',7,'p_programa','provolone.py',84),
-  ('cmds -> cmd cmds','cmds',2,'p_cmds','provolone.py',89),
-  ('cmds -> empty','cmds',1,'p_cmds','provolone.py',90),
-  ('cmd -> ENQUANTO ID FACA cmds FIM','cmd',5,'p_cmd','provolone.py',99),
-  ('cmd -> assignment','cmd',1,'p_cmd','provolone.py',100),
-  ('cmd -> arithmetic_expr','cmd',1,'p_cmd','provolone.py',101),
-  ('cmd -> conditional','cmd',1,'p_cmd','provolone.py',102),
-  ('cmd -> zero_statement','cmd',1,'p_cmd','provolone.py',103),
-  ('cmd -> eval_statement','cmd',1,'p_cmd','provolone.py',104),
-  ('cmd -> out_statement','cmd',1,'p_cmd','provolone.py',105),
-  ('assignment -> ID EQUAL ID','assignment',3,'p_assignment','provolone.py',111),
-  ('assignment -> ID EQUAL NUMERO','assignment',3,'p_assignment','provolone.py',112),
-  ('assignment -> ID EQUAL arithmetic_expr','assignment',3,'p_assignment','provolone.py',113),
-  ('arithmetic_expr -> ID PLUS ID','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',120),
-  ('arithmetic_expr -> ID PLUS NUMERO','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',121),
-  ('arithmetic_expr -> NUMERO PLUS ID','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',122),
-  ('arithmetic_expr -> ID MULT ID','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',123),
-  ('arithmetic_expr -> ID MULT NUMERO','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',124),
-  ('arithmetic_expr -> NUMERO MULT ID','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',125),
-  ('conditional -> IF condicao THEN cmds END_IF','conditional',5,'p_conditional','provolone.py',130),
-  ('conditional -> IF condicao THEN cmds ELSE cmds END_IF','conditional',7,'p_conditional','provolone.py',131),
-  ('zero_statement -> ZERO ID','zero_statement',2,'p_zero_statement','provolone.py',139),
-  ('eval_statement -> EVAL cmds VEZES arithmetic_expr FIM','eval_statement',5,'p_eval_statement','provolone.py',144),
-  ('eval_statement -> EVAL cmds VEZES ID FIM','eval_statement',5,'p_eval_statement','provolone.py',145),
-  ('out_statement -> OUT ID','out_statement',2,'p_out_statement','provolone.py',149),
-  ('varlist -> ID varlist','varlist',2,'p_varlist','provolone.py',153),
-  ('varlist -> ID','varlist',1,'p_varlist','provolone.py',154),
-  ('condicao -> ID COMPARE ID','condicao',3,'p_condicao','provolone.py',163),
-  ('condicao -> ID GREATER ID','condicao',3,'p_condicao','provolone.py',164),
-  ('condicao -> ID LESSER ID','condicao',3,'p_condicao','provolone.py',165),
-  ('condicao -> ID COMPARE NUMERO','condicao',3,'p_condicao','provolone.py',166),
-  ('condicao -> ID GREATER NUMERO','condicao',3,'p_condicao','provolone.py',167),
-  ('condicao -> ID LESSER NUMERO','condicao',3,'p_condicao','provolone.py',168),
-  ('empty -> <empty>','empty',0,'p_empty','provolone.py',173),
+  ('programa -> INICIO varlist MONITOR idlist EXECUTE cmds TERMINO','programa',7,'p_programa','provolone.py',93),
+  ('cmds -> cmd cmds','cmds',2,'p_cmds','provolone.py',104),
+  ('cmds -> cmd','cmds',1,'p_cmds','provolone.py',105),
+  ('cmd -> while_statement','cmd',1,'p_cmd','provolone.py',113),
+  ('cmd -> assignment','cmd',1,'p_cmd','provolone.py',114),
+  ('cmd -> conditional','cmd',1,'p_cmd','provolone.py',115),
+  ('cmd -> zero_statement','cmd',1,'p_cmd','provolone.py',116),
+  ('cmd -> eval_statement','cmd',1,'p_cmd','provolone.py',117),
+  ('term -> ID','term',1,'p_term','provolone.py',126),
+  ('term -> NUMERO','term',1,'p_term','provolone.py',127),
+  ('assignment -> ID EQUAL arithmetic_expr','assignment',3,'p_assignment','provolone.py',132),
+  ('arithmetic_expr -> arithmetic_expr PLUS arithmetic_expr','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',139),
+  ('arithmetic_expr -> arithmetic_expr MULT arithmetic_expr','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',140),
+  ('arithmetic_expr -> arithmetic_expr MINUS arithmetic_expr','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',141),
+  ('arithmetic_expr -> arithmetic_expr DIV arithmetic_expr','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',142),
+  ('arithmetic_expr -> OPEN_PAREN arithmetic_expr CLOSE_PAREN','arithmetic_expr',3,'p_arithmetic_expr','provolone.py',143),
+  ('arithmetic_expr -> term','arithmetic_expr',1,'p_arithmetic_expr','provolone.py',144),
+  ('conditional -> IF condicao THEN cmds END_IF','conditional',5,'p_conditional','provolone.py',154),
+  ('conditional -> IF condicao THEN cmds ELSE cmds END_IF','conditional',7,'p_conditional','provolone.py',155),
+  ('while_statement -> ENQUANTO condicao FACA cmds FIM','while_statement',5,'p_while_statement','provolone.py',162),
+  ('zero_statement -> ZERO OPEN_PAREN ID CLOSE_PAREN','zero_statement',4,'p_zero_statement','provolone.py',166),
+  ('eval_statement -> EVAL cmds VEZES arithmetic_expr FIM','eval_statement',5,'p_eval_statement','provolone.py',172),
+  ('varlist -> ID varlist','varlist',2,'p_varlist','provolone.py',177),
+  ('varlist -> ID','varlist',1,'p_varlist','provolone.py',178),
+  ('condicao -> arithmetic_expr COMPARE arithmetic_expr','condicao',3,'p_condicao','provolone.py',186),
+  ('condicao -> arithmetic_expr GREATER arithmetic_expr','condicao',3,'p_condicao','provolone.py',187),
+  ('condicao -> arithmetic_expr LESSER arithmetic_expr','condicao',3,'p_condicao','provolone.py',188),
+  ('condicao -> ID','condicao',1,'p_condicao','provolone.py',189),
+  ('idlist -> ID idlist','idlist',2,'p_idlist','provolone.py',197),
+  ('idlist -> ID','idlist',1,'p_idlist','provolone.py',198),
 ]
