@@ -39,6 +39,9 @@ t_NUMERO = r'\d+'
 t_OPEN_PAREN = r'\('
 t_CLOSE_PAREN = r'\)'
 
+# Dictionary to store monitored variables, 
+# if monitored_vars[var] == 0 the var should not be printed
+# it should be printed otherwise (monitored_vars[var] == 1)
 monitored_vars = dict()
 
 # Identifier (ID) token definition
