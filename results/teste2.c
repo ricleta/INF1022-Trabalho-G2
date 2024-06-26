@@ -4,7 +4,7 @@ int a = 0;
 int b = 0;
 
 // Monitored vars =  b
-printf("b = %d\n", b)
+printf("b = %d\n", b);
 
 a = 15;
 if (a > 10) {

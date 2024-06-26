@@ -4,7 +4,7 @@ int x = 0;
 int y = 0;
 
 // Monitored vars =  x
-printf("x = %d\n", x)
+printf("x = %d\n", x);
 
 x = 10;
 printf("x = %d\n", x);

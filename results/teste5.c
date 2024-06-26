@@ -5,7 +5,7 @@ int b = 0;
 int c = 0;
 
 // Monitored vars =  c
-printf("c = %d\n", c)
+printf("c = %d\n", c);
 
 a = 10;b = 20;
 if (a * b > 150) {

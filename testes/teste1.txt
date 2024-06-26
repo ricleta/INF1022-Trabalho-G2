@@ -1,5 +1,4 @@
-INICIO
-x y
+INICIO x y
 MONITOR x 
 EXECUTE
 x = 10

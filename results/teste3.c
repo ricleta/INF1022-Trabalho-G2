@@ -3,8 +3,8 @@ int main() {
 int counter = 0;
 int result = 0;
 
-// Monitored vars =  r
-printf("r = %d\n", r)
+// Monitored vars =  result
+printf("result = %d\n", result);
 
 counter = 0;while (counter < 5) {
 result = result + counter;

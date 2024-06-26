@@ -1,5 +1,4 @@
-INICIO
-a b
+INICIO a b
 MONITOR b 
 EXECUTE
 a = 15

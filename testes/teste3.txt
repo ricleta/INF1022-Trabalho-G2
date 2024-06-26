@@ -1,10 +1,9 @@
-INICIO
-counter result
+INICIO counter result
 MONITOR result 
 EXECUTE
 counter = 0
-ENQUANTO counter < 5 FACA
-    result = result + counter
-    counter = counter + 1
+ENQUANTO counter < 5 FACA 
+result = result + counter 
+counter = counter + 1
 FIM
 TERMINO

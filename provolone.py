@@ -93,9 +93,9 @@ def p_programa(p):
     '''programa : INICIO varlist MONITOR idlist EXECUTE cmds TERMINO '''
     show_monitored = "// Monitored vars = "
     for var in monitored_vars:
-        show_monitored += f" {var[0]}"
+        show_monitored += f" {var}"
     for var in monitored_vars:
-        show_monitored += f'\nprintf("{var[0]} = %d\\n", {var[0]})'
+        show_monitored += f'\nprintf("{var} = %d\\n", {var});'
     show_monitored += "\n"
     
     p[0] = f"#include <stdio.h>\nint main() {{\n{p[2]}\n{show_monitored}\n{p[6]}\nreturn 0;\n}}"
@@ -132,6 +132,7 @@ def p_assignment(p):
     ''' assignment : ID EQUAL arithmetic_expr
     '''
     p[0] = f"{p[1]} = {p[3]}"
+    
     if p[1] in monitored_vars:
         monitored_vars[p[1]] = 1
 
@@ -171,7 +172,7 @@ def p_zero_statement(p):
 def p_eval_statement(p):
     ''' eval_statement : EVAL cmds VEZES arithmetic_expr FIM 
     '''
-    p[0] = f"for (int i = 0; i < {p[4]}; i++) {{\n{p[2]}\n}}"
+    p[0] = f"\nfor (int i = 0; i < {p[4]}; i++) {{\n{p[2]}\n}}"
 
 def p_varlist(p):
     '''varlist : ID varlist
@@ -186,8 +187,12 @@ def p_condicao(p):
     '''condicao : arithmetic_expr COMPARE arithmetic_expr
                 | arithmetic_expr GREATER arithmetic_expr
                 | arithmetic_expr LESSER arithmetic_expr
+                | ID
     '''
-    p[0] = f"{p[1]} {p[2]} {p[3]}"
+    if len(p) == 2:
+        p[0] = f"{p[1]} != 0"
+    else:
+        p[0] = f"{p[1]} {p[2]} {p[3]}"
 
 def p_idlist(p):
     '''idlist : ID idlist
@@ -204,9 +209,9 @@ def p_error(p):
 lexer = lex.lex()
 parser = yacc.yacc()
 
-teste_file_name = input("Digite o nome do arquivo de teste (sem o .txt): ")
-in_file = open(f"testes/{teste_file_name}.txt", "r").read()
-out_file = open(f"results/{teste_file_name}.c", "w")
+teste_file_num = input("Digite o numero do arquivo de teste (sem o .txt): ")
+in_file = open(f"testes/teste{teste_file_num}.txt", "r").read()
+out_file = open(f"results/teste{teste_file_num}.c", "w")
 
 # Parse input program
 lexer.input(in_file)
